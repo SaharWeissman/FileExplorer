@@ -9,11 +9,11 @@ import java.io.FileFilter;
  * Created by Sahar on 06/21/2017.
  */
 public class AbstractDirectory {
-    public IAbstractFSDataItem root;
-    IAbstractDataConsumer view;
+    public AbstractFSDataItem root;
+    AbstractDataConsumer view;
     LibraryMode[] modes;
 
-    public AbstractDirectory(IAbstractFSDataItem root, IAbstractDataConsumer view, LibraryMode...modes) throws NullPointerException{
+    public AbstractDirectory(AbstractFSDataItem root, AbstractDataConsumer view, LibraryMode...modes) throws NullPointerException{
         if(root == null){
             throw new NullPointerException("root of abstract directory cannot be null!");
         }else{
