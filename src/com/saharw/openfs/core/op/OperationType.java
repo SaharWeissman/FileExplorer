@@ -8,5 +8,5 @@ public enum OperationType {
     DELETE,
     LIST_FILES,
     ENCRYPT,
-    DECRYPT
+    EXIT, DECRYPT
 }

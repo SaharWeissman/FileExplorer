@@ -1,10 +1,12 @@
 package com.saharw.openfs.api;
 
+import com.saharw.openfs.core.op.AbstractFSTree;
+
 /**
  * Created by Sahar on 06/21/2017.
  */
 public abstract class AbstractFSOperationListener {
-    public abstract void onSuccess(long totalTime);
-    public abstract void onProgress(byte[] writtenBytes, long totalBytes);
+    public abstract void onSuccess(AbstractFSTree tree);
+    public abstract void onProgress(AbstractFSTree partialTree);
     public abstract void onError(Throwable t);
 }

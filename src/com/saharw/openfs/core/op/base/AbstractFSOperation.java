@@ -22,5 +22,5 @@ public abstract class AbstractFSOperation<T extends AbstractFSDataItem> {
         this.abstractItem = item;
     }
 
-    public abstract void operate(Collection<AbstractFSOperationListener> listeners, @Nullable FileFilter fileFilter);
+    public abstract void operate(Collection<AbstractFSOperationListener> listeners, @Nullable FileFilter fileFilter, boolean isFilterRecursive);
 }
