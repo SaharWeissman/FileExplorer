@@ -2,8 +2,10 @@ package com.saharw.openfs.app;
 
 import com.saharw.openfs.api.AbstractFSDataItem;
 import com.saharw.openfs.api.AbstractType;
+import com.saharw.openfs.api.IStringable;
 import com.saharw.openfs.api.impl.JavaFileWrapper;
 import com.saharw.openfs.core.op.AbstractFSTree;
+import com.saharw.openfs.core.verbose.VerboseLevel;
 
 import java.io.FileFilter;
 import java.util.Collection;
@@ -25,11 +27,13 @@ public class CustomShell {
         this.mCurrDepthLevel = currDepthLevel;
     }
 
-    public StringBuilder listFiles() {
+    public StringBuilder listFiles(VerboseLevel level) {
         StringBuilder sb = new StringBuilder();
         JavaFileWrapper root = mTree.root;
         if(mCurrDepthLevel == 0){
-            sb.append(root.toString()+"\n");
+            if(root instanceof IStringable){
+                sb.append(((IStringable)root).stringify(level)+"\n");
+            }
         }
         Collection<AbstractFSDataItem> descendants = root.descendants;
         if(descendants != null) {
@@ -43,9 +47,14 @@ public class CustomShell {
                         for (int i = 0; i <= mCurrDepthLevel; i++) {
                             sb.append("\t");
                         }
-                        sb.append(child.toString());
+
+                        if(child instanceof IStringable){
+                            sb.append(((IStringable)child).stringify(level));
+                            sb.append(((IStringable)child).stringify(level));
+
+                        }
                         CustomShell customShell = new CustomShell(new AbstractFSTree(child), mMaxDepthLevel, currStep, fileFilter);
-                        sb.append("\n" + customShell.listFiles());
+                        sb.append("\n" + customShell.listFiles(level));
                     }
                 }
             }

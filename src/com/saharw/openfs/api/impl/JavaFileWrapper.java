@@ -2,7 +2,9 @@ package com.saharw.openfs.api.impl;
 
 import com.saharw.openfs.api.AbstractFSDataItem;
 import com.saharw.openfs.api.AbstractType;
+import com.saharw.openfs.api.IStringable;
 import com.saharw.openfs.core.op.util.FilesUtil;
+import com.saharw.openfs.core.verbose.VerboseLevel;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -14,7 +16,7 @@ import java.util.Set;
 /**
  * Created by Sahar on 06/21/2017.
  */
-public class JavaFileWrapper extends AbstractFSDataItem<JavaFileWrapperOperationResult> {
+public class JavaFileWrapper extends AbstractFSDataItem<JavaFileWrapperOperationResult> implements IStringable {
     public final File file;
 
     public JavaFileWrapper(File file, AbstractType type, String name, String path, Collection<AbstractFSDataItem> descendants, Set<AbstractFSDataItem> predecessors) {
@@ -60,21 +62,50 @@ public class JavaFileWrapper extends AbstractFSDataItem<JavaFileWrapperOperation
     }
 
     @Override
-    public String toString() {
+    public String stringify(VerboseLevel level) {
         StringBuilder sb = new StringBuilder();
-        if(file != null && file.exists() && file.getPath() != null && file.getName() != null && !file.getName().isEmpty() && !file.getPath().isEmpty()) {
-            sb.append(type.txt+"\t");
-            if(file.isDirectory()) {
-                sb.append(file.getPath() + "\\");
+        switch (level){
+            case SHORT:{
+                if(file != null && file.exists() && file.getPath() != null && file.getName() != null && !file.getName().isEmpty() && !file.getPath().isEmpty()) {
+                    sb.append(type.txt+"\t");
+                    if(file.isDirectory()) {
+                        sb.append(file.getPath() + "\\");
+                    }
+                    sb.append(String.format("%-4s \tSize:%-4d Bytes", file.getName(), file.length()));
+                }
+                break;
             }
-            sb.append(String.format("%-4s \tSize:%-4d Bytes\tlast mod: %-4s", file.getName(), file.length(), new Date(file.lastModified())));
-        }
+            case MEDIUM:{
+                if(file != null && file.exists() && file.getPath() != null && file.getName() != null && !file.getName().isEmpty() && !file.getPath().isEmpty()) {
+                    sb.append(type.txt+"\t");
+                    if(file.isDirectory()) {
+                        sb.append(file.getPath() + "\\");
+                    }
+                    sb.append(String.format("%-4s \tSize:%-4d Bytes\tlast mod: %-4s", file.getName(), file.length(), new Date(file.lastModified())));
+                }
 
-        String isDir = file.isDirectory() ? "D" : "f";
-        String canRead = file.canRead() ? " R" : "";
-        String canWrite = file.canWrite() ? " W" : "";
-        String canExecute = file.canExecute() ? " Exe" : "";
-        sb.append(String.format("\tmeta: %-4s", isDir, canRead, canWrite, canExecute));
+                break;
+            }
+            case LONG:{
+                if(file != null && file.exists() && file.getPath() != null && file.getName() != null && !file.getName().isEmpty() && !file.getPath().isEmpty()) {
+                    sb.append(type.txt+"\t");
+                    if(file.isDirectory()) {
+                        sb.append(file.getPath() + "\\");
+                    }
+                    sb.append(String.format("%-4s \tSize:%-4d Bytes\tlast mod: %-4s", file.getName(), file.length(), new Date(file.lastModified())));
+                }
+
+                String isDir = file.isDirectory() ? "D" : "f";
+                String canRead = file.canRead() ? " R" : "";
+                String canWrite = file.canWrite() ? " W" : "";
+                String canExecute = file.canExecute() ? " Exe" : "";
+                sb.append(String.format("\tmeta: %-4s", isDir, canRead, canWrite, canExecute));
+                break;
+            }
+            default:{
+                break;
+            }
+        }
         return sb.toString();
     }
 }
